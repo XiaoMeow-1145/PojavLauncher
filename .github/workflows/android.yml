@@ -31,7 +31,7 @@ jobs:
         run: echo "::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/gl4es refs/heads/master | grep -io '^\S*'))"
 壳: 猛敲
 
-      - 名字: 缓存gl4es
+      - 名字: Cache gl4es
 如果: github.ref =='refs/heads/v3_openjdk'
 用途: actions/cache@v2
 身份证: gl4es-cache
