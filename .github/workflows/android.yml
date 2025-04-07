@@ -29,84 +29,84 @@ jobs:
         if: github.ref == 'refs/heads/v3_openjdk'
         id: gl4es-sha
         run: echo "::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/gl4es refs/heads/master | grep -io '^\S*'))"
-壳: 猛敲
+        shell: bash
 
-      - 名字: Cache gl4es
-如果: github.ref =='refs/heads/v3_openjdk'
-用途: actions/cache@v2
-身份证: gl4es-cache
-与:
-路径: gl4es/libs
-键: gl4es-android-共享-nodbg-test1-2-${{ steps.gl4es-sha.outputs.sha }}
+      - name: Cache gl4es
+        if: github.ref == 'refs/heads/v3_openjdk'
+        uses: actions/cache@v3
+        id: gl4es-cache
+        with:
+          path: gl4es/libs
+          key: gl4es-android-shared-nodbg-test1-2-${{ steps.gl4es-sha.outputs.sha }}
 
-      - 名字: 获得gl4es
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.gl4es-cache.outputs.cache-hit !='true'
-用途: actions/checkout@v2
-与:
-仓库: "ptitSeb/gl4es"
-路径: "gl4es"
+      - name: Get gl4es
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.gl4es-cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: "ptitSeb/gl4es"
+          path: "gl4es"
 
-      - 名字: 打造gl4es
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.gl4es-cache.outputs.cache-hit !='true'
-        continue-on-error: 真正的
-跑: |
-cd gl4es
-git config --global user.email "github-actions@users.noreply.github.com"
-git config --global user.name "github-actions"
-git remote添加上游https://github.com/PojavLauncherTeam/gl4es
-上游
-结账主机
-git合并-允许-无关-历史上游/主|回声“合并退出代码$？”
-$ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk
+      - name: Build gl4es
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.gl4es-cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        run: |
+          cd gl4es
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git config --global user.name "github-actions"
+          git remote add upstream https://github.com/PojavLauncherTeam/gl4es
+          git fetch upstream
+          git checkout master
+          git merge --allow-unrelated-histories upstream/master || echo "Merge exit code $?"
+          $ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk
 
-      - 名字: 安装gl4es
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.gl4es-cache.outputs.cache-hit !='true'
-        continue-on-error: 真正的
-跑: |
-cp -R gl4es/libs/* app_pojavlauncher/src/main/jniLibs/
-mv gl4es ..
-git添加。
-git commit -am "CI: Update gl4es"
-git推送
+      - name: Install gl4es
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.gl4es-cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        run: |
+          cp -R gl4es/libs/* app_pojavlauncher/src/main/jniLibs/
+          mv gl4es ..
+          git add .
+          git commit -am "CI: Update gl4es"
+          git push
 
-      - 名字: 获取最新提交散列
-如果: github.ref =='refs/heads/v3_openjdk'
-身份证: vgpu-sha
-跑: 回声"::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/VGPU refs/heads/main | grep -io '^\S*'))"
-壳: 猛敲
+      - name: Get vgpu latest commit hash
+        if: github.ref == 'refs/heads/v3_openjdk'
+        id: vgpu-sha
+        run: echo "::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/VGPU refs/heads/main | grep -io '^\S*'))"
+        shell: bash
 
-      - 名字: 缓存vgpu
-如果: github.ref =='refs/heads/v3_openjdk'
-用途: actions/cache@v3
-身份证: vgpu-cache
-与:
-路径: vgpu/libs
-键: vgpu-android-共享-1-${{ steps.vgpu-sha.outputs.sha }}
+      - name: Cache vgpu
+        if: github.ref == 'refs/heads/v3_openjdk'
+        uses: actions/cache@v3
+        id: vgpu-cache
+        with:
+          path: vgpu/libs
+          key: vgpu-android-shared-1-${{ steps.vgpu-sha.outputs.sha }}
 
-      - 名字: 获取vgpu
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.vgpu-cache.outputs.cache-hit !='true'
-用途: actions/checkout@v2
-与:
-仓库: "PojavLauncherTeam/VGPU"
-路径: "vgpu"
+      - name: Get vgpu
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.vgpu-cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: "PojavLauncherTeam/VGPU"
+          path: "vgpu"
 
-      - 名字: 构建vgpu
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.vgpu-cache.outputs.cache-hit !='true'
-        continue-on-error: 真正的
-跑: |
-cd vgpu
-$ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk
+      - name: Build vgpu
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.vgpu-cache.outputs.cache-hit != 'true'
+        continue-on-error: true
+        run: |
+          cd vgpu
+          $ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk
 
-      - 名字: 安装vgpu
-如果: github.ref =='refs/heads/v3_openjdk'&& steps.vgpu-cache.outputs.cache-hit !='true'
-跑: |
-cp -R vgpu/libs/* app_pojavlauncher/src/main/jniLibs/
-mv vgpu ..
-git config --global user.email "github-actions@users.noreply.github.com"
-git config --global user.name "github-actions"
-git添加。
-git commit -am "CI: Update vgpu"
-git推送
+      - name: Install vgpu
+        if: github.ref == 'refs/heads/v3_openjdk' && steps.vgpu-cache.outputs.cache-hit != 'true'
+        run: |
+          cp -R vgpu/libs/* app_pojavlauncher/src/main/jniLibs/
+          mv vgpu ..
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git commit -am "CI: Update vgpu"
+          git push
 
       - name: Get JRE17
         uses: dawidd6/action-download-artifact@v2
