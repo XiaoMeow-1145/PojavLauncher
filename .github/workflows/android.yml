@@ -108,17 +108,6 @@ jobs:
           git commit -am "CI: Update vgpu"
           git push
 
-      - name: Get JRE21
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/components/jre
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/android-openjdk-build-multiarch
-          branch: buildjre21
-          name: jre21-pojav
-
       - name: Clean Artifacts Folder
         run: |
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
