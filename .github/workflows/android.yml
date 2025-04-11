@@ -33,7 +33,7 @@ jobs:
 
       - name: Cache gl4es
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: gl4es-cache
         with:
           path: gl4es/libs
@@ -77,7 +77,7 @@ jobs:
 
       - name: Cache vgpu
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: vgpu-cache
         with:
           path: vgpu/libs
@@ -107,18 +107,7 @@ jobs:
           git add .
           git commit -am "CI: Update vgpu"
           git push
-
-      - name: Get JRE17
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/components/jre
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/android-openjdk-build-multiarch
-          branch: buildjre17
-          name: jre17-pojav
-
+          
       - name: Clean Artifacts Folder
         run: |
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
@@ -141,7 +130,7 @@ jobs:
           ./gradlew :app_pojavlauncher:assembleRelease
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk
