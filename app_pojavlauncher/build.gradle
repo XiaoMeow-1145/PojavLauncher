@@ -52,18 +52,6 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-        release {
-            storeFile file("yvr1qcxr.jks")
-            storePassword "yvr1qcxr"
-            keyAlias System.getenv("SIGNING_KEY_ALIAS")
-            keyPassword "yvr1qcxr"
-        }
-	 googlePlayBuild {
-            storeFile file("yvr1qcxr.jks")
-            storePassword "yvr1qcxr"
-            keyAlias System.getenv("SIGNING_KEY_ALIAS")
-            keyPassword "yvr1qcxr"
-        }
     }
 	
     defaultConfig {
