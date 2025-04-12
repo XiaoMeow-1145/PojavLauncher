@@ -51,18 +51,7 @@ android {
             storePassword "android"
             keyAlias "androiddebugkey"
             keyPassword "android"
-        }
-        release {
-            storeFile file("yvr")
-            storePassword "123456"
-            keyAlias "yvr"
-            keyPassword "123456"
-        }
-	 googlePlayBuild {
-            storeFile file("yvr.jks")
-            storePassword "123456"
-            keyAlias "yvr"
-            keyPassword "123456"
+		
         }
     }
 	
