@@ -108,10 +108,6 @@ jobs:
           git commit -am "CI: Update vgpu"
           git push
 
-      - name: Clean Artifacts Folder
-        run: |
-          rm -rf app_pojavlauncher/main/src/assets/artifacts/*
-
       - name: Build APK with Gradle
         run: |
           chmod +x scripts/languagelist_updater.sh
