@@ -115,6 +115,13 @@ android {
     ndkVersion '21.4.7075529'
 }
 
+android {
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+}
 
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
