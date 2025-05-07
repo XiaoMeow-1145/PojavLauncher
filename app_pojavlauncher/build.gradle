@@ -53,6 +53,12 @@ android {
             keyPassword "android"
         }
     }
+    release {
+            storeFile file=/home/runner/work/PojavLauncher/PojavLauncher/app_pojavlauncher/yvr1qcxr.jks
+            storePassword=yvr1qcxr
+            keyAlias=yvr1qcxr
+            keyPassword=yvr1qcxr
+    }
 	
     defaultConfig {
         applicationId "net.kdt.pojavlaunch"
