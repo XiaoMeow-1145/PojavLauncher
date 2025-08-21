@@ -54,10 +54,10 @@ android {
         }
     }
     release {
-            storeFile=yvr1qcxr.jks
-            storePassword=yvr1qcxr
-            keyAlias=yvr1qcxr
-            keyPassword=yvr1qcxr
+            storeFile "yvr1qcxr.jks"
+            storePassword "yvr1qcxr"
+            keyAlias "yvr1qcxr"
+            keyPassword "yvr1qcxr"
     }
 	
     defaultConfig {
@@ -67,8 +67,8 @@ android {
         versionCode getDateSeconds()
         versionName getVersionName()
         multiDexEnabled true //important
+        }
     }
-
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
