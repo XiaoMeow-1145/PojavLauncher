@@ -52,12 +52,18 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-    }
-    release {
-            storeFile "yvr1qcxr.jks"
-            storePassword "yvr1qcxr"
-            keyAlias "yvr1qcxr"
-            keyPassword "yvr1qcxr"
+        release {
+            storeFile file("qcxrPojav.keystore")
+            storePassword System.getenv("SIGNING_KEY_PASSWORD")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+        }
+	 googlePlayBuild {
+            storeFile file("qcxrPojav.keystore")
+            storePassword System.getenv("SIGNING_KEY_PASSWORD")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+        }
     }
 	
     defaultConfig {
@@ -67,8 +73,8 @@ android {
         versionCode getDateSeconds()
         versionName getVersionName()
         multiDexEnabled true //important
-        }
     }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
