@@ -21,7 +21,4 @@ allprojects {
         maven { url "https://jitpack.io" }
         jcenter()
     }
-    
-dependencies {
-    implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.1.0'
 }
