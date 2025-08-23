@@ -150,6 +150,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //Mod manager related things
-    implementation 'com.github.mukeshsolanki.MarkdownView'
+    implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.8'
 }
