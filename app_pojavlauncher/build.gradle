@@ -36,6 +36,9 @@ def getVersionName =  {
     return TAG.toString().trim().replace("-g","-") + "-" + BRANCH.toString().trim()
 }
 
+plugins {
+	id 'com.android.application'
+}
 
 android {
     compileSdkVersion 31
