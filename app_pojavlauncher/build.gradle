@@ -37,13 +37,9 @@ def getVersionName =  {
 }
 
 
-android 
+android {
     compileSdkVersion 31
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
+    packagingOptions.jniLibs.useLegacyPackaging = true
 
     lintOptions {
         abortOnError false
