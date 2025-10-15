@@ -35,7 +35,7 @@ jobs:
 
       - name: Cache gl4es
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: gl4es-cache
         with:
           path: gl4es/libs
@@ -79,7 +79,7 @@ jobs:
 
       - name: Cache vgpu
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: vgpu-cache
         with:
           path: vgpu/libs
