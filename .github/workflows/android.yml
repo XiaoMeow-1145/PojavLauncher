@@ -209,7 +209,7 @@ jobs:
           ./gradlew :app_pojavlauncher:assembleRelease
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk
