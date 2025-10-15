@@ -35,7 +35,7 @@ jobs:
 
       - name: Cache gl4es
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: gl4es-cache
         with:
           path: gl4es/libs
@@ -43,7 +43,7 @@ jobs:
 
       - name: Get gl4es
         if: github.ref == 'refs/heads/v3_openjdk' && steps.gl4es-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: "ptitSeb/gl4es"
           path: "gl4es"
@@ -79,7 +79,7 @@ jobs:
 
       - name: Cache vgpu
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: vgpu-cache
         with:
           path: vgpu/libs
@@ -209,7 +209,7 @@ jobs:
           ./gradlew :app_pojavlauncher:assembleRelease
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: app-release
           path: app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk
