@@ -16,24 +16,25 @@ jobs:
       SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
       SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: set up JDK 11
-        uses: actions/setup-java@v1
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          java-version: 11
+          java-version: 17
+          distribution: 'temurin'
 
       - name: Get gl4es latest commit hash
         if: github.ref == 'refs/heads/v3_openjdk'
         id: gl4es-sha
-        run: echo "::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/gl4es refs/heads/master | grep -io '^\S*'))"
+        run: echo "sha=$(git ls-remote https://github.com/PojavLauncherTeam/gl4es refs/heads/master | grep -io '^\S*')" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Cache gl4es
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: gl4es-cache
         with:
           path: gl4es/libs
@@ -41,7 +42,7 @@ jobs:
 
       - name: Get gl4es
         if: github.ref == 'refs/heads/v3_openjdk' && steps.gl4es-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: "ptitSeb/gl4es"
           path: "gl4es"
@@ -72,12 +73,12 @@ jobs:
       - name: Get vgpu latest commit hash
         if: github.ref == 'refs/heads/v3_openjdk'
         id: vgpu-sha
-        run: echo "::set-output name=sha::$(echo $(git ls-remote https://github.com/PojavLauncherTeam/VGPU refs/heads/main | grep -io '^\S*'))"
+        run: echo "sha=$(git ls-remote https://github.com/PojavLauncherTeam/VGPU refs/heads/main | grep -io '^\S*')" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Cache vgpu
         if: github.ref == 'refs/heads/v3_openjdk'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: vgpu-cache
         with:
           path: vgpu/libs
@@ -85,7 +86,7 @@ jobs:
 
       - name: Get vgpu
         if: github.ref == 'refs/heads/v3_openjdk' && steps.vgpu-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: "PojavLauncherTeam/VGPU"
           path: "vgpu"
@@ -110,7 +111,7 @@ jobs:
 
       - name: Clean Artifacts Folder
         run: |
-          rm -rf app_pojavlauncher/main/src/assets/artifacts/*
+          rm -rf app_pojavlauncher/src/main/assets/artifacts/*
 
       - name: Build APK with Gradle
         run: |

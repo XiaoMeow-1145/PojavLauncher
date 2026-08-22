@@ -18,7 +18,7 @@ jar {
     File versionFile = file("../app_pojavlauncher/src/main/assets/components/lwjgl3/version")
     versionFile.write(String.valueOf(new Date().getTime()))
     from {
-        configurations.default.collect {
+        configurations.runtimeClasspath.collect {
             println(it.getName())
             it.isDirectory() ? it : zipTree(it)
         }

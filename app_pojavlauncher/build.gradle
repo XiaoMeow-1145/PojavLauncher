@@ -46,8 +46,9 @@ android {
         buildConfig = true
     }
 
-    lintOptions {
+    lint {
         abortOnError false
+        checkReleaseBuilds false
     }
 
     signingConfigs {
@@ -133,7 +134,6 @@ android {
         }
     }
 
-    buildToolsVersion '30.0.3'
     ndkVersion '22.1.7171670'
 }
 
@@ -167,4 +167,9 @@ dependencies {
     //Mod manager related things
     implementation 'com.github.falnatsheh:MarkdownView:98b0db192b'
     implementation 'com.squareup.picasso:picasso:2.8'
+}
+
+// Ensure jre_lwjgl3glfw jar is built before any app build step
+afterEvaluate {
+    preBuild.dependsOn(':jre_lwjgl3glfw:jar')
 }
