@@ -185,14 +185,11 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 return false;
         }
         
-        switch (v.getId()) {
-            case R.id.installmod_mouse_pri:
-                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isDown);
-                break;
-                
-            case R.id.installmod_mouse_sec:
-                AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isDown);
-                break;
+        int viewId = v.getId();
+        if (viewId == R.id.installmod_mouse_pri) {
+            AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON1_DOWN_MASK, isDown);
+        } else if (viewId == R.id.installmod_mouse_sec) {
+            AWTInputBridge.sendMousePress(AWTInputEvent.BUTTON3_DOWN_MASK, isDown);
         }
         return true;
     }

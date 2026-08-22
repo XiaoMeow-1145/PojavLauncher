@@ -63,7 +63,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         Tabs[1] = findViewById(R.id.btnTab2);
         Tabs[2] = findViewById(R.id.btnTab3);
 
-        if (BuildConfig.DEBUG) {
+        if (net.kdt.pojavlaunch.BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
         }
 

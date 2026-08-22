@@ -80,7 +80,7 @@ public class ControlButton extends androidx.appcompat.widget.AppCompatButton imp
         if(mProperties.isToggle){
             //For the toggle layer
             final TypedValue value = new TypedValue();
-            getContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
+            getContext().getTheme().resolveAttribute(com.google.android.material.R.attr.colorPrimary, value, true);
             mRectPaint.setColor(value.data);
             mRectPaint.setAlpha(128);
         }else{

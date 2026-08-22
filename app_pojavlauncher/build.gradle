@@ -38,8 +38,13 @@ def getVersionName =  {
 
 
 android {
+    namespace 'net.kdt.pojavlaunch'
     compileSdkVersion 31
     packagingOptions.jniLibs.useLegacyPackaging = true
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     lintOptions {
         abortOnError false

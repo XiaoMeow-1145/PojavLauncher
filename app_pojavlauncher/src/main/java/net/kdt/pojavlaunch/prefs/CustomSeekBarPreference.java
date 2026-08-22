@@ -26,8 +26,8 @@ public class CustomSeekBarPreference extends SeekBarPreference {
     public CustomSeekBarPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray a = context.obtainStyledAttributes(
-                attrs, R.styleable.SeekBarPreference, defStyleAttr, defStyleRes);
-        mMin = a.getInt(R.styleable.SeekBarPreference_min, 0);
+                attrs, androidx.preference.R.styleable.SeekBarPreference, defStyleAttr, defStyleRes);
+        mMin = a.getInt(androidx.preference.R.styleable.SeekBarPreference_min, 0);
         a.recycle();
     }
 
@@ -36,7 +36,7 @@ public class CustomSeekBarPreference extends SeekBarPreference {
     }
 
     public CustomSeekBarPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.seekBarPreferenceStyle);
+        this(context, attrs, androidx.preference.R.attr.seekBarPreferenceStyle);
     }
 
     public CustomSeekBarPreference(Context context) {
@@ -57,9 +57,9 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         TextView titleTextView = (TextView) view.findViewById(android.R.id.title);
         titleTextView.setTextColor(Color.WHITE);
 
-        mTextView = (TextView) view.findViewById(R.id.seekbar_value);
+        mTextView = (TextView) view.findViewById(androidx.preference.R.id.seekbar_value);
         mTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-        SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar);
+        SeekBar seekBar = (SeekBar) view.findViewById(androidx.preference.R.id.seekbar);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
