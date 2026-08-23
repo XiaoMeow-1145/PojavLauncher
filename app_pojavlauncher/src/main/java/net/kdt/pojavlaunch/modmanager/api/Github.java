@@ -10,12 +10,20 @@ import us.feras.mdv.MarkdownView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Github {
 
     private static final APIUtils.APIHandler handler = new APIUtils.APIHandler("https://api.github.com/repos");
     private static String[] repoList;
+
+    private static final Map<String, String> VIVECRAFT_DOWNLOAD_URLS = new HashMap<>();
+    static {
+        VIVECRAFT_DOWNLOAD_URLS.put("1.18.2", "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.3-1.18.2/vivecraft.jar");
+        VIVECRAFT_DOWNLOAD_URLS.put("1.19.2", "https://github.com/QuestCraftPlusPlus/VivecraftMod/releases/download/v1.0-1.19.2/vivecraft.jar");
+    }
 
     public static class Release {
         @SerializedName("name")
@@ -42,6 +50,23 @@ public class Github {
     }
 
     public static ModData getModData(String slug, String gameVersion) throws IOException {
+        // Use hardcoded download URLs for Vivecraft
+        if (slug.equals("vivecraft")) {
+            String downloadUrl = VIVECRAFT_DOWNLOAD_URLS.get(gameVersion);
+            if (downloadUrl != null) {
+                ModData modData = new ModData();
+                modData.platform = "github";
+                modData.repo = "QuestCraftPlusPlus/VivecraftMod";
+                modData.title = "Vivecraft";
+                modData.slug = "vivecraft";
+                modData.iconUrl = "https://avatars.githubusercontent.com/u/21025855?s=280&v=4";
+                modData.fileData.id = gameVersion;
+                modData.fileData.url = downloadUrl;
+                modData.fileData.filename = "vivecraft.jar";
+                return modData;
+            }
+        }
+
         for (String repo : repoList) {
             String[] repoData = repo.split("/");
             Release[] releases = handler.get(String.format("%s/%s/releases", repoData[0], repoData[1]), Release[].class);
