@@ -49,7 +49,8 @@ public class Github {
             if (releases == null) return null;
 
             for (Release release : releases) {
-                if (release.name.split("-")[1].equals(gameVersion)) {
+                String[] nameParts = release.name.split("-");
+                if (nameParts.length >= 2 && nameParts[1].equals(gameVersion)) {
                     for (Asset asset : release.assets) {
                         if (asset.name.replace(".jar", "").equals(slug)) {
                             ModData modData = new ModData();
