@@ -95,4 +95,5 @@ static std::string load_file(const char *path) {
         in.close();
         return(contents.str());
     }
+    return "";
 }
