@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
@@ -35,11 +36,24 @@ public class ModManager {
             public void run() {
                 try {
                     //InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
-                    modrinthCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modrinth-compat.json"), JsonObject.class);
-                    curseforgeCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/curseforge-compat.json"), JsonObject.class);
+                    JsonObject modManagerJson = null;
+                    try {
+                        modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        modrinthCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modrinth-compat.json"), JsonObject.class);
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        curseforgeCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/curseforge-compat.json"), JsonObject.class);
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
 
-                    JsonArray repoList = modManagerJson.getAsJsonArray("repos");
+                    JsonArray repoList = modManagerJson != null ? modManagerJson.getAsJsonArray("repos") : null;
                     /*if (repoList == null) {
                         Log.d("MOD Manager", "REPO LIST IS NULL!!");
                         repoList = new JsonArray();
@@ -73,7 +87,36 @@ public class ModManager {
                         state.addInstance(instance);
 
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
+                    } else {
+                        try {
+                            state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                            // File is corrupted, delete it and re-create with defaults
+                            modsJson.delete();
+                            state = new State();
+                            state.fabricLoaderVersion = flVersion;
+                            String gameVersion = Tools.getCompatibleVersions("releases").get(0);
+                            Fabric.downloadJson(gameVersion, flVersion);
+                            String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                            Instance instance = new Instance();
+                            instance.setName(fabricLoaderName);
+                            instance.setGameVersion(gameVersion);
+                            instance.setLoaderVersion(fabricLoaderName);
+                            state.addInstance(instance);
+
+                            gameVersion = Tools.getCompatibleVersions("releases").get(1);
+                            Fabric.downloadJson(gameVersion, flVersion);
+                            fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                            instance = new Instance();
+                            instance.setName(fabricLoaderName);
+                            instance.setGameVersion(gameVersion);
+                            instance.setLoaderVersion(fabricLoaderName);
+                            state.addInstance(instance);
+
+                            Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state));
+                        }
+                    }
 
                     //Remove mod metadata if they were deleted manually
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
@@ -110,12 +153,18 @@ public class ModManager {
             ArrayList<Pair<String, String>> mods = new ArrayList<>();
             JsonObject json = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
 
-            for (JsonElement element : json.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
-                JsonObject mod = element.getAsJsonObject();
-                mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
+            if (json.has("core_mods")) {
+                JsonObject coreMods = json.getAsJsonObject("core_mods");
+                if (coreMods.has(version)) {
+                    JsonArray modsArray = coreMods.getAsJsonArray(version);
+                    for (JsonElement element : modsArray) {
+                        JsonObject mod = element.getAsJsonObject();
+                        mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
+                    }
+                }
             }
             return mods;
-        } catch (IOException e) {
+        } catch (JsonSyntaxException | IOException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
@@ -137,8 +186,8 @@ public class ModManager {
             try {
                 state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), State.class);
                 instance = state.getInstance(name);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (JsonSyntaxException | IOException e) {
+                e.printStackTrace();
             }
         }
         return instance;
