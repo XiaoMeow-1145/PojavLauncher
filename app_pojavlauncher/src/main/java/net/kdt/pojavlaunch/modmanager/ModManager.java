@@ -94,7 +94,7 @@ public class ModManager {
                             e.printStackTrace();
                             // File is corrupted, delete it and re-create with defaults
                             modsJson.delete();
-                            state = new State();
+                            state = new net.kdt.pojavlaunch.modmanager.State();
                             state.fabricLoaderVersion = flVersion;
                             String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                             Fabric.downloadJson(gameVersion, flVersion);
